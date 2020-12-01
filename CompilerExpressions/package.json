@@ -1,0 +1,16 @@
+{
+    "name": "compilerexpressions",
+    "version": "0.0.1",
+    "description": "Trabalho final da disciplina construção de compiladores 2020.1",
+    "main": "index.mjs",
+    "scripts": {
+        "test": "tape ${T:-test/*.test.js} | tap-spec"
+    },
+    "author": "Edwino Stein",
+    "license": "MIT",
+    "devDependencies": {
+        "esm": "^3.2.25",
+        "tap-spec": "^5.0.0",
+        "tape": "^5.0.1"
+    }
+}
