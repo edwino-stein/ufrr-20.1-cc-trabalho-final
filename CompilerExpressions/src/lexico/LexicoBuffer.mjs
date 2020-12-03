@@ -31,7 +31,7 @@ export default class LexicoBuffer {
 
     get proximo () {
 
-        if(this._buffer.length === 0) {
+        while(this._buffer.length === 0) {
 
             if(this._linhas.length === 0) return this._eof;
 
