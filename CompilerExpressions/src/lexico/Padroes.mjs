@@ -3,7 +3,7 @@ const padroes = {
     opAritmeticos: ['+', '-', '*', '/', '%'],
     especiais: ['=', '(', ')', ',', ':', ';'],
 
-    nomeEscalares: ['int', 'bool', 'string'],
+    nomeEscalares: ['int'],
     palavras: ['var', 'inicio', 'fim', 'se', 'senao', 'fimse', 'ler', 'escrever'],
 
     stringLiteral: "([\"'])(?:(?=(\\\\?))\\2.)*?\\1",
