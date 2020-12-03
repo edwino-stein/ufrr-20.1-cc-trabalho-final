@@ -78,3 +78,158 @@ tape('Verificar tabela de símbolos com redeclarações de variável', (t) => {
     t.end();
 });
 
+tape('Verificar comando de atribuição simples válida', (t) => {
+
+    const arvore = sintatico.parsear(`
+        var:
+            v: int;
+        inicio
+            v = 123;
+        fim
+    `);
+
+    const semantico = new Semantico(arvore);
+    let arvoreExpressoes = [];
+
+    t.doesNotThrow(
+        () => arvoreExpressoes = semantico.validarComandos(),
+        'Não deve reportar erros'
+    );
+
+    t.equals(
+        arvoreExpressoes.length,
+        1,
+        'Deve conter um comando'
+    );
+
+    const lexemas = [];
+    arvoreExpressoes[0].emOrdem(n => lexemas.push(n.simbolo));
+
+    t.deepEqual(
+        lexemas,
+        ['v', '123', '='],
+        'A expressão em notação pós-fixa deve ser a esperada'
+    );
+
+    t.end();
+});
+
+tape('Verificar comando de atribuição complexa válida', (t) => {
+
+    const arvore = sintatico.parsear(`
+        var:
+            a: int;
+            b: int;
+            c: int;
+            d: int;
+            v: int;
+        inicio
+            v = a - (b - a * (c + b/d));
+        fim
+    `);
+
+    const semantico = new Semantico(arvore);
+    let arvoreExpressoes = [];
+
+    t.doesNotThrow(
+        () => arvoreExpressoes = semantico.validarComandos(),
+        'Não deve reportar erros'
+    );
+
+    t.equals(
+        arvoreExpressoes.length,
+        1,
+        'Deve conter um comando'
+    );
+
+    const lexemas = [];
+    arvoreExpressoes[0].emOrdem(n => lexemas.push(n.simbolo));
+
+    t.deepEqual(
+        lexemas,
+        ['v', 'a', 'b', 'a', 'c', 'b', 'd', '/', '+', '*', '-', '-', '='],
+        'A expressão em notação pós-fixa deve ser a esperada'
+    );
+
+    t.end();
+});
+
+tape('Verificar três comandos de atribuição válidos', (t) => {
+
+    const arvore = sintatico.parsear(`
+        var:
+            a: int;
+            b: int;
+        inicio
+            a = 123;
+            b = 25 % 2;
+            b = a * b;
+        fim
+    `);
+
+    const semantico = new Semantico(arvore);
+    let arvoreExpressoes = [];
+
+    t.doesNotThrow(
+        () => arvoreExpressoes = semantico.validarComandos(),
+        'Não deve reportar erros'
+    );
+
+    t.equals(
+        arvoreExpressoes.length,
+        3,
+        'Deve conter três comandos'
+    );
+
+    let lexemas = [];
+    arvoreExpressoes[0].emOrdem(n => lexemas.push(n.simbolo));
+
+    t.deepEqual(
+        lexemas,
+        ['a', '123', '='],
+        'A primera expressão em notação pós-fixa deve ser a esperada'
+    );
+
+    lexemas = [];
+    arvoreExpressoes[1].emOrdem(n => lexemas.push(n.simbolo));
+
+    t.deepEqual(
+        lexemas,
+        ['b', '25', '2', '%', '='],
+        'A segunda expressão em notação pós-fixa deve ser a esperada'
+    );
+
+    lexemas = [];
+    arvoreExpressoes[2].emOrdem(n => lexemas.push(n.simbolo));
+
+    t.deepEqual(
+        lexemas,
+        ['b', 'a', 'b', '*', '='],
+        'A terceira expressão em notação pós-fixa deve ser a esperada'
+    );
+
+    t.end();
+});
+
+tape('Verificar comando de atribuição inválido', (t) => {
+
+    const arvore = sintatico.parsear(`
+        var:
+            a: int;
+        inicio
+            a = 123 + b;
+        fim
+    `);
+
+    const semantico = new Semantico(arvore);
+
+    t.throws(
+        () => semantico.validarComandos(),
+        (e) =>  typeof(e) === 'object' &&
+                e.detalhes.atual.palavra === 'b' &&
+                e.detalhes.tipo === 'variavel-nao-declarada',
+        'Deve informar erro erro de que a variavel "b" não foi declarada'
+    );
+
+    t.end();
+});
