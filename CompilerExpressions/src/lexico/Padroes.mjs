@@ -30,7 +30,6 @@ padroes.classesDeToken = {
     'comando': (s) => padroes.palavras.includes(s),
     'op-aritmetico': (s) => padroes.opAritmeticos.includes(s),
     'especial': (s) => padroes.especiais.includes(s),
-    'literal-string': (s) => padroes.ehStringLiteral(s),
     'identificador': (s) => padroes.matchExact(s, padroes.identificadores),
     'literal-int': (s) => padroes.matchExact(s, padroes.intLiteral),
     'sem-categoria': (s) => true
@@ -64,7 +63,6 @@ padroes.subclasseDeToken = {
             ';': 'del'
         }[s];
     },
-    'literal-string': (s) => '',
     'literal-int': (s) => '',
     'identificador': (s) => '',
     'sem-categoria': (s) => ''
