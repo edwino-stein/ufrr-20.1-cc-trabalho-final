@@ -135,10 +135,10 @@ tape('Quebrar a string de entrada em lexemas válidas e espeços', (t) => {
     );
 
     t.deepEqual(
-        Lexico._parsearLexemas('123var1=*(var)2 + var3/((2&'),
+        Lexico._parsearLexemas('123var1=*(var)2 + var3/((2'),
         [
             '123var1', '=', '*', '(', 'var', ')', '2', ' ', '+', ' ',
-            'var3', '/', '(', '(', '2', '&'
+            'var3', '/', '(', '(', '2'
         ],
         'A string deve ser quebrada apenas nos lugares certos'
     );
@@ -175,27 +175,11 @@ tape('Verificar casamento de tokens com strings de lexemas de todos os símbolos
         );
     }
 
-    for (const l of Padroes.boolLiterais) {
-        t.equals(
-            lexico._buscarTokenPelaLexema(l).classe,
-            'literal-bool',
-            'A lexema "'+l+'" deve retornar a classe "literal-bool"'
-        );
-    }
-
     for (const l of Padroes.opAritmeticos) {
         t.equals(
             lexico._buscarTokenPelaLexema(l).classe,
             'op-aritmetico',
             'A lexema "'+l+'" deve retornar a classe "op-aritmetico"'
-        );
-    }
-
-    for (const l of Padroes.opLogicos) {
-        t.equals(
-            lexico._buscarTokenPelaLexema(l).classe,
-            'op-logico',
-            'A lexema "'+l+'" deve retornar a classe "op-logico"'
         );
     }
 
@@ -207,19 +191,11 @@ tape('Verificar casamento de tokens com strings de lexemas de todos os símbolos
         );
     }
 
-    for (const l of ['"string"', '"uma string"', '""', '" "']) {
-        t.equals(
-            lexico._buscarTokenPelaLexema(l).classe,
-            'literal-string',
-            'A lexema "'+l+'" deve retornar a classe "literal-string"'
-        );
-    }
-
     for (const l of ['0', '123', '0123', '0x12AB', '0xabCD']) {
         t.equals(
             lexico._buscarTokenPelaLexema(l).classe,
-            'litaral-int',
-            'A lexema "'+l+'" deve retornar a classe "litaral-int"'
+            'literal-int',
+            'A lexema "'+l+'" deve retornar a classe "literal-int"'
         );
     }
 
@@ -333,8 +309,8 @@ tape('Verificar casamento de tokens para a string "var1 + c/2;"', (t) => {
 
     t.equals(
         lexemas[4].token.tipo,
-        'litaral-int',
-        'lexemas[4].token.tipo deve ser igual a "litaral-int"'
+        'literal-int',
+        'lexemas[4].token.tipo deve ser igual a "literal-int"'
     );
 
     t.equals(
@@ -353,104 +329,6 @@ tape('Verificar casamento de tokens para a string "var1 + c/2;"', (t) => {
         lexemas[5].token.tipo,
         'especial-del',
         'lexemas[5].token.tipo deve ser igual a "especial-del"'
-    );
-
-    t.end();
-});
-
-tape('Verificar casamento de tokens para a string "str = "str + cool" +"concat""', (t) => {
-
-    const lexico = new Lexico();
-    const lexemas = lexico.tokenizarLinha('str = "str + cool" +"concat"', 0);
-
-    t.equals(
-        lexemas[0].palavra,
-        'str',
-        'lexemas[0].palavra deve ser igual a "str"'
-    );
-
-    t.equals(
-        lexemas[0].coluna,
-        0,
-        'lexemas[0].coluna deve ser igual a 0'
-    );
-
-    t.equals(
-        lexemas[0].token.tipo,
-        'identificador',
-        'lexemas[0].token.tipo deve ser igual a "identificador"'
-    );
-
-    t.equals(
-        lexemas[1].palavra,
-        '=',
-        'lexemas[1].palavra deve ser igual a "="'
-    );
-
-    t.equals(
-        lexemas[1].coluna,
-        4,
-        'lexemas[1].coluna deve ser igual a 4'
-    );
-
-    t.equals(
-        lexemas[1].token.tipo,
-        'especial-atr',
-        'lexemas[1].token.tipo deve ser igual a "especial-atr"'
-    );
-
-    t.equals(
-        lexemas[2].palavra,
-        '"str + cool"',
-        'lexemas[2].palavra deve ser igual a ""str + cool""'
-    );
-
-    t.equals(
-        lexemas[2].coluna,
-        6,
-        'lexemas[2].coluna deve ser igual a 6'
-    );
-
-    t.equals(
-        lexemas[2].token.tipo,
-        'literal-string',
-        'lexemas[2].token.tipo deve ser igual a "literal-string"'
-    );
-
-    t.equals(
-        lexemas[3].palavra,
-        '+',
-        'lexemas[3].palavra deve ser igual a "+"'
-    );
-
-    t.equals(
-        lexemas[3].coluna,
-        19,
-        'lexemas[3].coluna deve ser igual a 19'
-    );
-
-    t.equals(
-        lexemas[3].token.tipo,
-        'op-aritmetico-adi',
-        'lexemas[3].token.tipo deve ser igual a "op-aritmetico-adi"'
-    );
-
-    t.equals(
-        lexemas[4].palavra,
-        '"concat"',
-        'lexemas[4].palavra deve ser igual a ""concat""'
-    );
-
-    t.equals(
-        lexemas[4].coluna,
-        20,
-        'lexemas[4].coluna deve ser igual a 20'
-    );
-
-    t.equals(
-        lexemas[4].token.tipo,
-        'literal-string',
-        'lexemas[4].token.tipo deve ser igual a "literal-string"'
     );
 
     t.end();

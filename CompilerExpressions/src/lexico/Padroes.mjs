@@ -1,15 +1,13 @@
 const padroes = {
 
     opAritmeticos: ['+', '-', '*', '/', '%'],
-    opLogicos: ['==', '!=', '>', '>=', '<', '<=', '&', '|'],
     especiais: ['=', '(', ')', ',', ':', ';'],
 
-    nomeEscalares: ['int', 'bool', 'string'],
-    palavras: ['var', 'inicio', 'fim', 'se', 'senao', 'fimse', 'ler', 'escrever'],
-    boolLiterais: ['verd', 'fals'],
+    nomeEscalares: ['int'],
+    palavras: ['variaveis', 'inicio', 'fim', 'retorne'],
 
     stringLiteral: "([\"'])(?:(?=(\\\\?))\\2.)*?\\1",
-    intLitaral: /^[1-9][0-9]*|0([1-7][0-7]*|x[0-9a-zA-Z]+)?$/,
+    intLiteral: /^[1-9][0-9]*|0([1-7][0-7]*|x[0-9a-zA-Z]+)?$/,
     identificadores: /^[a-zA-Z\_][a-zA-Z\_0-9]*$/,
 
     espacos: /\s+/g,
@@ -30,13 +28,10 @@ padroes.ehStringLiteral = (s) => padroes.matchExact(
 padroes.classesDeToken = {
     'nome-escalar': (s) => padroes.nomeEscalares.includes(s),
     'comando': (s) => padroes.palavras.includes(s),
-    'literal-bool': (s) => padroes.boolLiterais.includes(s),
     'op-aritmetico': (s) => padroes.opAritmeticos.includes(s),
-    'op-logico': (s) => padroes.opLogicos.includes(s),
     'especial': (s) => padroes.especiais.includes(s),
-    'literal-string': (s) => padroes.ehStringLiteral(s),
     'identificador': (s) => padroes.matchExact(s, padroes.identificadores),
-    'literal-int': (s) => padroes.matchExact(s, padroes.intLitaral),
+    'literal-int': (s) => padroes.matchExact(s, padroes.intLiteral),
     'sem-categoria': (s) => true
 };
 
@@ -58,18 +53,6 @@ padroes.subclasseDeToken = {
             '%': 'mod'
         }[s];
     },
-    'op-logico': (s) => {
-        return {
-            '==': 'igu',
-            '!=': 'dif',
-            '>': 'mai',
-            '>=': 'mae',
-            '<': 'men',
-            '<=': 'mee',
-            '&': 'e',
-            '|': 'ou'
-        }[s];
-    },
     'especial': (s) => {
         return {
             '=': 'atr',
@@ -80,8 +63,6 @@ padroes.subclasseDeToken = {
             ';': 'del'
         }[s];
     },
-    'literal-bool': (s) => '',
-    'literal-string': (s) => '',
     'literal-int': (s) => '',
     'identificador': (s) => '',
     'sem-categoria': (s) => ''
