@@ -1,4 +1,4 @@
-variaveis:require = require('esm')(module);
+require = require('esm')(module);
 const tape = require('tape');
 const Sintatico = require('../../src/sintatico/Sintatico.mjs').default;
 const Semantico = require('../../src/semantico/Semantico.mjs').default;
@@ -8,7 +8,7 @@ const sintatico = new Sintatico();
 tape('Verificar tabela de símbolos com declarações de variáveis válidas', (t) => {
 
     const arvore = sintatico.parsear(`
-        variaveis:
+        variaveis
             resultado: int;
             entrada: int;
         inicio fim
@@ -59,7 +59,7 @@ tape('Verificar tabela de símbolos com declarações de variáveis válidas', (
 tape('Verificar tabela de símbolos com redeclarações de variável', (t) => {
 
     const arvore = sintatico.parsear(`
-        variaveis:
+        variaveis
             resultado: int;
             resultado: int;
         inicio fim
@@ -81,7 +81,7 @@ tape('Verificar tabela de símbolos com redeclarações de variável', (t) => {
 tape('Verificar comando de atribuição simples válida', (t) => {
 
     const arvore = sintatico.parsear(`
-        variaveis:
+        variaveis
             v: int;
         inicio
             v = 123;
@@ -117,7 +117,7 @@ tape('Verificar comando de atribuição simples válida', (t) => {
 tape('Verificar comando de atribuição complexa válida', (t) => {
 
     const arvore = sintatico.parsear(`
-        variaveis:
+        variaveis
             a: int;
             b: int;
             c: int;
@@ -157,7 +157,7 @@ tape('Verificar comando de atribuição complexa válida', (t) => {
 tape('Verificar três comandos de atribuição válidos', (t) => {
 
     const arvore = sintatico.parsear(`
-        variaveis:
+        variaveis
             a: int;
             b: int;
         inicio
@@ -214,7 +214,7 @@ tape('Verificar três comandos de atribuição válidos', (t) => {
 tape('Verificar comando de atribuição inválido', (t) => {
 
     const arvore = sintatico.parsear(`
-        variaveis:
+        variaveis
             a: int;
         inicio
             a = 123 + b;

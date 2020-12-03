@@ -34,7 +34,7 @@ tape('Verificar regra sintática do bloco principal com declarações', (t) => {
 
     t.doesNotThrow(
         () => prods = sintatico.parsearProducoes(`
-            variaveis:
+            variaveis
                 abc : int;
                 cba : int;
             inicio
@@ -48,7 +48,7 @@ tape('Verificar regra sintática do bloco principal com declarações', (t) => {
         [
             '<programa> -> <bloco_declaracao> <bloco_principal>',
             '<bloco_principal> -> comando-inic comando-fim',
-            '<bloco_declaracao> -> comando-vari especial-dpo <lista_declaracao>',
+            '<bloco_declaracao> -> comando-vari <lista_declaracao>',
             '<lista_declaracao> -> <declaracao> <lista_declaracao>',
             '<lista_declaracao> -> <declaracao>',
             '<declaracao> -> identificador especial-dpo <declaracao_tipo> especial-del',
@@ -142,7 +142,7 @@ tape('Verificar regra sintática do bloco principal com declarações e com coma
 
     t.doesNotThrow(
         () => prods = sintatico.parsearProducoes(`
-            variaveis:
+            variaveis
                 resultado: int;
                 entrada: int;
             inicio
@@ -182,7 +182,7 @@ tape('Verificar regra sintática do bloco principal com declarações e com coma
             '<expressao_fator> -> <literal>',
             '<literal> -> literal-int',
 
-            '<bloco_declaracao> -> comando-vari especial-dpo <lista_declaracao>',
+            '<bloco_declaracao> -> comando-vari <lista_declaracao>',
             '<lista_declaracao> -> <declaracao> <lista_declaracao>',
             '<lista_declaracao> -> <declaracao>',
             '<declaracao> -> identificador especial-dpo <declaracao_tipo> especial-del',
@@ -228,7 +228,7 @@ tape('Verificar regra sintática do bloco principal com declarações e sem o co
 
     t.throws(
         () => sintatico.parsearProducoes(`
-            variaveis:
+            variaveis
                 entrada : int;
                 entrada = 123;
             fim
@@ -272,7 +272,7 @@ tape('Verificar árvore sintática do bloco principal sem declarações', (t) =>
 tape('Verificar árvore sintática do bloco principal com declarações', (t) => {
 
     const arvore = sintatico.parsear(`
-        variaveis:
+        variaveis
             abc : int;
             cba : int;
         inicio
@@ -289,7 +289,7 @@ tape('Verificar árvore sintática do bloco principal com declarações', (t) =>
     t.deepEqual(
         simbolos,
         [
-            '<programa>', '<bloco_declaracao>', 'comando-vari', 'especial-dpo',
+            '<programa>', '<bloco_declaracao>', 'comando-vari',
             '<lista_declaracao>', '<declaracao>', 'identificador', 'especial-dpo',
             '<declaracao_tipo>', 'nome-escalar-int', 'especial-del',
             '<lista_declaracao>', '<declaracao>', 'identificador', 'especial-dpo',
@@ -301,7 +301,7 @@ tape('Verificar árvore sintática do bloco principal com declarações', (t) =>
 
     t.deepEqual(
         lexemas,
-        ['variaveis', ':', 'abc', ':', 'int', ';', 'cba', ':', 'int', ';', 'inicio', 'fim'],
+        ['variaveis', 'abc', ':', 'int', ';', 'cba', ':', 'int', ';', 'inicio', 'fim'],
         'A árvore deve ter as lexemas esperadas em suas folhas quando percorrida em pré-ordem'
     );
 
@@ -311,7 +311,7 @@ tape('Verificar árvore sintática do bloco principal com declarações', (t) =>
 tape('Verificar árvore sintática do bloco principal com declarações e atribuições', (t) => {
 
     const arvore = sintatico.parsear(`
-        variaveis:
+        variaveis
             resultado: int;
             entrada: int;
         inicio
@@ -330,7 +330,7 @@ tape('Verificar árvore sintática do bloco principal com declarações e atribu
     t.deepEqual(
         simbolos,
         [
-            '<programa>', '<bloco_declaracao>', 'comando-vari', 'especial-dpo',
+            '<programa>', '<bloco_declaracao>', 'comando-vari',
             '<lista_declaracao>', '<declaracao>', 'identificador', 'especial-dpo',
             '<declaracao_tipo>', 'nome-escalar-int', 'especial-del',
             '<lista_declaracao>', '<declaracao>', 'identificador', 'especial-dpo',
@@ -351,7 +351,7 @@ tape('Verificar árvore sintática do bloco principal com declarações e atribu
     t.deepEqual(
         lexemas,
         [
-            'variaveis', ':', 'resultado', ':', 'int', ';', 'entrada', ':', 'int', ';',
+            'variaveis', 'resultado', ':', 'int', ';', 'entrada', ':', 'int', ';',
             'inicio', 'entrada', '=', '123', ';', 'resultado', '=', 'entrada',
             '%', '2', ';', 'fim'
         ],
@@ -364,7 +364,7 @@ tape('Verificar árvore sintática do bloco principal com declarações e atribu
 tape('Busca de nós das expressões aritméticas na árvore sintática', (t) => {
 
     const arvore = sintatico.parsear(`
-        variaveis:
+        variaveis
             resultado: int;
             entrada: int;
         inicio
