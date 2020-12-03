@@ -12,6 +12,11 @@ export default class Arvore {
     get extra() { return this._extra; }
     set extra(extra) { this._extra = extra; }
 
+    emOrdem (handle) {
+        for (const no of this._nos) no.emOrdem(handle);
+        handle(this);
+    }
+
     preOrdem (handle) {
         handle(this);
         for (const no of this._nos) no.preOrdem(handle);
