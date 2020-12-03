@@ -1,6 +1,7 @@
 require = require('esm')(module);
 const tape = require('tape');
 const LexicoBuffer = require('../../src/lexico/LexicoBuffer.mjs').default;
+const Lexico = require('../../src/lexico/Lexico.mjs').default;
 
 tape('Verificar construtor de LexicoBuffer', (t) => {
 
@@ -84,6 +85,86 @@ tape('Verificar o retorno de proximo() com entrada do tipo string', (t) => {
     t.equals(buffer.proximo, 'token21', 'Deve ser "token21"');
     t.equals(buffer.proximo, 'token31', 'Deve ser "token31"');
     t.equals(buffer.proximo, 'token32', 'Deve ser "token32"');
+    t.equals(buffer.proximo, 'eof', 'Deve ser "eof"');
+
+    t.end();
+});
+
+tape('Verificar o retorno de proximo() com parseador lexico e entrada do tipo string simples', (t) => {
+
+    const lexico = new Lexico();
+    const buffer = new LexicoBuffer(
+        lexico.tokenizarHandle,
+        'eof',
+        "inicio abc = 123 fim"
+    );
+
+    t.equals(buffer.proximo.palavra, 'inicio', 'Deve ser "inicio"');
+    t.equals(buffer.proximo.palavra, 'abc', 'Deve ser "abc"');
+    t.equals(buffer.proximo.palavra, '=', 'Deve ser "="');
+    t.equals(buffer.proximo.palavra, '123', 'Deve ser "123"');
+    t.equals(buffer.proximo.palavra, 'fim', 'Deve ser "fim"');
+    t.equals(buffer.proximo, 'eof', 'Deve ser "eof"');
+
+    t.end();
+});
+
+tape('Verificar o retorno de proximo() com parseador lexico e entrada do tipo string com quebras de linha', (t) => {
+
+    const lexico = new Lexico();
+    const buffer = new LexicoBuffer(
+        lexico.tokenizarHandle,
+        'eof',
+        "inicio\nabc = 123\nfim"
+    );
+
+    t.equals(buffer.proximo.palavra, 'inicio', 'Deve ser "inicio"');
+    t.equals(buffer.proximo.palavra, 'abc', 'Deve ser "abc"');
+    t.equals(buffer.proximo.palavra, '=', 'Deve ser "="');
+    t.equals(buffer.proximo.palavra, '123', 'Deve ser "123"');
+    t.equals(buffer.proximo.palavra, 'fim', 'Deve ser "fim"');
+    t.equals(buffer.proximo, 'eof', 'Deve ser "eof"');
+
+    t.end();
+});
+
+tape('Verificar o retorno de proximo() com parseador lexico e entrada do tipo string com quebras de linha (CRLF)', (t) => {
+
+    const lexico = new Lexico();
+    const buffer = new LexicoBuffer(
+        lexico.tokenizarHandle,
+        'eof',
+        "inicio\r\nabc = 123\r\nfim"
+    );
+
+    t.equals(buffer.proximo.palavra, 'inicio', 'Deve ser "inicio"');
+    t.equals(buffer.proximo.palavra, 'abc', 'Deve ser "abc"');
+    t.equals(buffer.proximo.palavra, '=', 'Deve ser "="');
+    t.equals(buffer.proximo.palavra, '123', 'Deve ser "123"');
+    t.equals(buffer.proximo.palavra, 'fim', 'Deve ser "fim"');
+    t.equals(buffer.proximo, 'eof', 'Deve ser "eof"');
+
+    t.end();
+});
+
+tape('Verificar o retorno de proximo() com parseador lexico e entrada do tipo string de multiplas linhas', (t) => {
+
+    const lexico = new Lexico();
+    const buffer = new LexicoBuffer(
+        lexico.tokenizarHandle,
+        'eof',
+        `
+            inicio
+                abc = 123
+            fim
+        `
+    );
+
+    t.equals(buffer.proximo.palavra, 'inicio', 'Deve ser "inicio"');
+    t.equals(buffer.proximo.palavra, 'abc', 'Deve ser "abc"');
+    t.equals(buffer.proximo.palavra, '=', 'Deve ser "="');
+    t.equals(buffer.proximo.palavra, '123', 'Deve ser "123"');
+    t.equals(buffer.proximo.palavra, 'fim', 'Deve ser "fim"');
     t.equals(buffer.proximo, 'eof', 'Deve ser "eof"');
 
     t.end();
