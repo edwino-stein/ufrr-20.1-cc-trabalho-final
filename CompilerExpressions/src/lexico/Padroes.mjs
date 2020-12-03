@@ -7,7 +7,7 @@ const padroes = {
     palavras: ['var', 'inicio', 'fim', 'se', 'senao', 'fimse', 'ler', 'escrever'],
 
     stringLiteral: "([\"'])(?:(?=(\\\\?))\\2.)*?\\1",
-    intLitaral: /^[1-9][0-9]*|0([1-7][0-7]*|x[0-9a-zA-Z]+)?$/,
+    intLiteral: /^[1-9][0-9]*|0([1-7][0-7]*|x[0-9a-zA-Z]+)?$/,
     identificadores: /^[a-zA-Z\_][a-zA-Z\_0-9]*$/,
 
     espacos: /\s+/g,
@@ -32,7 +32,7 @@ padroes.classesDeToken = {
     'especial': (s) => padroes.especiais.includes(s),
     'literal-string': (s) => padroes.ehStringLiteral(s),
     'identificador': (s) => padroes.matchExact(s, padroes.identificadores),
-    'literal-int': (s) => padroes.matchExact(s, padroes.intLitaral),
+    'literal-int': (s) => padroes.matchExact(s, padroes.intLiteral),
     'sem-categoria': (s) => true
 };
 

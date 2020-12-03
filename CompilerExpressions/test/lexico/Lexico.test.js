@@ -202,8 +202,8 @@ tape('Verificar casamento de tokens com strings de lexemas de todos os símbolos
     for (const l of ['0', '123', '0123', '0x12AB', '0xabCD']) {
         t.equals(
             lexico._buscarTokenPelaLexema(l).classe,
-            'litaral-int',
-            'A lexema "'+l+'" deve retornar a classe "litaral-int"'
+            'literal-int',
+            'A lexema "'+l+'" deve retornar a classe "literal-int"'
         );
     }
 
@@ -317,8 +317,8 @@ tape('Verificar casamento de tokens para a string "var1 + c/2;"', (t) => {
 
     t.equals(
         lexemas[4].token.tipo,
-        'litaral-int',
-        'lexemas[4].token.tipo deve ser igual a "litaral-int"'
+        'literal-int',
+        'lexemas[4].token.tipo deve ser igual a "literal-int"'
     );
 
     t.equals(
