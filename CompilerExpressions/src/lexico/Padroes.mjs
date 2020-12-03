@@ -13,7 +13,7 @@ const padroes = {
     identificadores: /^[a-zA-Z\_][a-zA-Z\_0-9]*$/,
 
     espacos: /\s+/g,
-    EOL: "\n"
+    EOL: /\r?\n/
 };
 
 padroes.matchExact = (str, regex) => {
@@ -36,7 +36,7 @@ padroes.classesDeToken = {
     'especial': (s) => padroes.especiais.includes(s),
     'literal-string': (s) => padroes.ehStringLiteral(s),
     'identificador': (s) => padroes.matchExact(s, padroes.identificadores),
-    'litaral-int': (s) => padroes.matchExact(s, padroes.intLitaral),
+    'literal-int': (s) => padroes.matchExact(s, padroes.intLitaral),
     'sem-categoria': (s) => true
 };
 
@@ -82,7 +82,7 @@ padroes.subclasseDeToken = {
     },
     'literal-bool': (s) => '',
     'literal-string': (s) => '',
-    'litaral-int': (s) => '',
+    'literal-int': (s) => '',
     'identificador': (s) => '',
     'sem-categoria': (s) => ''
 }
