@@ -455,3 +455,16 @@ tape('Verificar casamento de tokens para a string "str = "str + cool" +"concat""
 
     t.end();
 });
+
+tape('Verificar casamento de tokens para a string "123abc"', (t) => {
+
+    const lexico = new Lexico();
+
+    t.throws(
+        () => lexico.tokenizarLinha('123abc', 0),
+        (e) => typeof(e) === 'object' && e.detalhes.encontrado.palavra === '123abc',
+        'Não deve reconhecer a entrada'
+    );
+
+    t.end();
+});
