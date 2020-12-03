@@ -10,7 +10,7 @@ const gramatica = new Gramatica({
 
     // Bloco de declaração de variáveis
     // Padrão: "var: ..."
-    '<bloco_declaracao>': ['comando-vari especial-dpo <lista_declaracao>'],
+    '<bloco_declaracao>': ['comando-vari <lista_declaracao>'],
     '<lista_declaracao>': [
         '<declaracao> <lista_declaracao>',
         '<declaracao>'

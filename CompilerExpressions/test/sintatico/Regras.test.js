@@ -45,7 +45,7 @@ tape('Verificar regra sintática do bloco de declaração de variávés', (t) =>
                 (s, l) => s.split(' '),
                 '$',
                 [
-                    'comando-vari especial-dpo',
+                    'comando-vari',
                     'identificador especial-dpo nome-escalar-int especial-del',
                     'identificador especial-dpo nome-escalar-int especial-del'
                 ]
@@ -57,7 +57,7 @@ tape('Verificar regra sintática do bloco de declaração de variávés', (t) =>
     t.deepEqual(
         prods.map(p => p.comoString),
         [
-            '<bloco_declaracao> -> comando-vari especial-dpo <lista_declaracao>',
+            '<bloco_declaracao> -> comando-vari <lista_declaracao>',
             '<lista_declaracao> -> <declaracao> <lista_declaracao>',
             '<lista_declaracao> -> <declaracao>',
             '<declaracao> -> identificador especial-dpo <declaracao_tipo> especial-del',
@@ -759,7 +759,7 @@ tape('Verificar regra sintática do bloco principal com declarações', (t) => {
                 (s, l) => s.split(' '),
                 '$',
                 [
-                    'comando-vari especial-dpo',
+                    'comando-vari',
                     'identificador especial-dpo nome-escalar-int especial-del',
                     'identificador especial-dpo nome-escalar-int especial-del',
                     'comando-inic',
@@ -775,7 +775,7 @@ tape('Verificar regra sintática do bloco principal com declarações', (t) => {
         [
             '<programa> -> <bloco_declaracao> <bloco_principal>',
             '<bloco_principal> -> comando-inic comando-fim',
-            '<bloco_declaracao> -> comando-vari especial-dpo <lista_declaracao>',
+            '<bloco_declaracao> -> comando-vari <lista_declaracao>',
             '<lista_declaracao> -> <declaracao> <lista_declaracao>',
             '<lista_declaracao> -> <declaracao>',
             '<declaracao> -> identificador especial-dpo <declaracao_tipo> especial-del',
@@ -934,7 +934,7 @@ tape('Verificar regra sintática do bloco principal com declarações e sem o co
                 (s, l) => s.split(' '),
                 '$',
                 [
-                    'comando-vari especial-dpo',
+                    'comando-vari',
                     'identificador especial-dpo nome-escalar-int especial-del',
                     'identificador especial-atr literal-int especial-del',
                     'comando-fim'
@@ -983,7 +983,7 @@ tape('Verificar regra sintática do bloco principal com declarações inválda e
                 (s, l) => s.split(' '),
                 '$',
                 [
-                    'comando-vari especial-dpo',
+                    'comando-vari',
                     'identificador nome-escalar-int especial-del',
                     'comando-inicio',
                     'identificador especial-atr literal-int especial-del',
@@ -1009,7 +1009,7 @@ tape('Verificar regra sintática do bloco principal com declarações nválda e 
                 (s, l) => s.split(' '),
                 '$',
                 [
-                    'comando-vari especial-dpo',
+                    'comando-vari',
                     'identificador especial-dpo nome-escalar-int especial-del',
                     'comando-inicio',
                     'identificador especial-atr literal-int',
