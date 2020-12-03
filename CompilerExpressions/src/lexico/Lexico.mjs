@@ -136,7 +136,6 @@ export default class Lexico {
 
         const operadores = [
             ...Padroes.opAritmeticos,
-            ...Padroes.opLogicos,
             ...Padroes.especiais
         ];
 

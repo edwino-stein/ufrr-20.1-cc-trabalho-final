@@ -135,10 +135,10 @@ tape('Quebrar a string de entrada em lexemas válidas e espeços', (t) => {
     );
 
     t.deepEqual(
-        Lexico._parsearLexemas('123var1=*(var)2 + var3/((2&'),
+        Lexico._parsearLexemas('123var1=*(var)2 + var3/((2'),
         [
             '123var1', '=', '*', '(', 'var', ')', '2', ' ', '+', ' ',
-            'var3', '/', '(', '(', '2', '&'
+            'var3', '/', '(', '(', '2'
         ],
         'A string deve ser quebrada apenas nos lugares certos'
     );
@@ -175,27 +175,11 @@ tape('Verificar casamento de tokens com strings de lexemas de todos os símbolos
         );
     }
 
-    for (const l of Padroes.boolLiterais) {
-        t.equals(
-            lexico._buscarTokenPelaLexema(l).classe,
-            'literal-bool',
-            'A lexema "'+l+'" deve retornar a classe "literal-bool"'
-        );
-    }
-
     for (const l of Padroes.opAritmeticos) {
         t.equals(
             lexico._buscarTokenPelaLexema(l).classe,
             'op-aritmetico',
             'A lexema "'+l+'" deve retornar a classe "op-aritmetico"'
-        );
-    }
-
-    for (const l of Padroes.opLogicos) {
-        t.equals(
-            lexico._buscarTokenPelaLexema(l).classe,
-            'op-logico',
-            'A lexema "'+l+'" deve retornar a classe "op-logico"'
         );
     }
 
