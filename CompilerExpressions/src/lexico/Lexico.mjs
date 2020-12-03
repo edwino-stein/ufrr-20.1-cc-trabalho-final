@@ -1,6 +1,7 @@
 import Padroes from './Padroes.mjs';
 import Token from './Token.mjs';
 import Lexema from './Lexema.mjs';
+import ErroLexico from '../exception/ErroLexico.mjs'
 
 export default class Lexico {
 
@@ -33,8 +34,15 @@ export default class Lexico {
 
         for (const l of lexemasStr) {
             if(!Padroes.ehEspaco(l)) {
+
                 const token = this._buscarTokenPelaLexema(l);
-                lexemas.push(new Lexema(l, linha, coluna, token));
+                const lexema = new Lexema(l, linha, coluna, token);
+
+                if (token === undefined || token.tipo === 'sem-categoria') {
+                    throw ErroLexico(lexema);
+                }
+
+                lexemas.push(lexema);
             }
             coluna += l.length;
         }
