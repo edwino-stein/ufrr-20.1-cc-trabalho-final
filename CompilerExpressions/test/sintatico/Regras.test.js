@@ -717,6 +717,134 @@ tape('Verificar regra sintática de uma atribuicao no padrão "(id = int);"', (t
     t.end();
 });
 
+tape('Verificar regra sintática do comando retorne no padrão "retorne int;"', (t) => {
+
+    const analisador = new PrecedenciaFraca(gramatica, '<retorne_principal>', '$');
+    let prods = null;
+
+    t.doesNotThrow(
+        () => prods = analisador.analisar(
+            new LexicoBuffer(
+                (s, l) => s.split(' '),
+                '$',
+                [
+                    'comando-reto literal-int especial-del',
+                ]
+            )
+        ),
+        'Deve reconhecer a entrada'
+    );
+
+    t.deepEqual(
+        prods.map(p => p.comoString),
+        [
+            '<retorne_principal> -> comando-reto <retorno_valor> especial-del',
+            '<retorno_valor> -> <expressao>',
+            '<expressao> -> <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> <literal>',
+            '<literal> -> literal-int'
+        ],
+        'As produções devem casar'
+    );
+
+    t.end();
+});
+
+tape('Verificar regra sintática do comando retorne no padrão "retorne id;"', (t) => {
+
+    const analisador = new PrecedenciaFraca(gramatica, '<retorne_principal>', '$');
+    let prods = null;
+
+    t.doesNotThrow(
+        () => prods = analisador.analisar(
+            new LexicoBuffer(
+                (s, l) => s.split(' '),
+                '$',
+                [
+                    'comando-reto identificador especial-del',
+                ]
+            )
+        ),
+        'Deve reconhecer a entrada'
+    );
+
+    t.deepEqual(
+        prods.map(p => p.comoString),
+        [
+            '<retorne_principal> -> comando-reto <retorno_valor> especial-del',
+            '<retorno_valor> -> <expressao>',
+            '<expressao> -> <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> identificador'
+        ],
+        'As produções devem casar'
+    );
+
+    t.end();
+});
+
+tape('Verificar regra sintática do comando retorne no padrão "retorne id + int;"', (t) => {
+
+    const analisador = new PrecedenciaFraca(gramatica, '<retorne_principal>', '$');
+    let prods = null;
+
+    t.doesNotThrow(
+        () => prods = analisador.analisar(
+            new LexicoBuffer(
+                (s, l) => s.split(' '),
+                '$',
+                [
+                    'comando-reto identificador op-aritmetico-adi',
+                    'literal-int especial-del',
+                ]
+            )
+        ),
+        'Deve reconhecer a entrada'
+    );
+
+    t.deepEqual(
+        prods.map(p => p.comoString),
+        [
+            '<retorne_principal> -> comando-reto <retorno_valor> especial-del',
+            '<retorno_valor> -> <expressao>',
+            '<expressao> -> <expressao> op-aritmetico-adi <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> <literal>',
+            '<literal> -> literal-int',
+            '<expressao> -> <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> identificador'
+        ],
+        'As produções devem casar'
+    );
+
+    t.end();
+});
+
+tape('Verificar regra sintática do comando retorne no padrão "retorne;"', (t) => {
+
+    const analisador = new PrecedenciaFraca(gramatica, '<retorne_principal>', '$');
+    let prods = null;
+
+    t.throws(
+        () => prods = analisador.analisar(
+            new LexicoBuffer(
+                (s, l) => s.split(' '),
+                '$',
+                [
+                    'comando-reto especial-del',
+                ]
+            )
+        ),
+        (e) => typeof(e) === 'object' && e.detalhes.encontrado === 'especial-del',
+        'Não deve reconhecer a entrada "retorne;"'
+    );
+
+    t.end();
+});
+
+
 tape('Verificar regra sintática do bloco principal sem declarações', (t) => {
 
     const analisador = new PrecedenciaFraca(gramatica, '<programa>', '$');
@@ -858,6 +986,142 @@ tape('Verificar regra sintática do bloco principal sem declarações e com dois
             '<lista_comando> -> <lista_comando> <comando>',
             '<comando> -> <atribuicao>',
             '<atribuicao> -> identificador especial-atr <retorno_valor> especial-del',
+            '<retorno_valor> -> <expressao>',
+            '<expressao> -> <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> identificador',
+            '<lista_comando> -> <comando>',
+            '<comando> -> <atribuicao>',
+            '<atribuicao> -> identificador especial-atr <retorno_valor> especial-del',
+            '<retorno_valor> -> <expressao>',
+            '<expressao> -> <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> <literal>',
+            '<literal> -> literal-int'
+        ],
+        'As produções devem casar'
+    );
+
+    t.end();
+});
+
+tape('Verificar regra sintática do bloco principal sem declarações e um comando retorne', (t) => {
+
+    const analisador = new PrecedenciaFraca(gramatica, '<programa>', '$');
+    let prods = null;
+
+    t.doesNotThrow(
+        () => prods = analisador.analisar(
+            new LexicoBuffer(
+                (s, l) => s.split(' '),
+                '$',
+                [
+                    'comando-inic',
+                    'comando-reto literal-int especial-del',
+                    'comando-fim'
+                ]
+            )
+        ),
+        'Deve reconhecer a entrada'
+    );
+
+    t.deepEqual(
+        prods.map(p => p.comoString),
+        [
+            '<programa> -> <bloco_principal>',
+            '<bloco_principal> -> comando-inic <lista_comando> comando-fim',
+            '<lista_comando> -> <comando>',
+            '<comando> -> <retorne_principal>',
+            '<retorne_principal> -> comando-reto <retorno_valor> especial-del',
+            '<retorno_valor> -> <expressao>',
+            '<expressao> -> <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> <literal>',
+            '<literal> -> literal-int'
+        ],
+        'As produções devem casar'
+    );
+
+    t.end();
+});
+
+tape('Verificar regra sintática do bloco principal sem declarações e dois comandos retorne', (t) => {
+
+    const analisador = new PrecedenciaFraca(gramatica, '<programa>', '$');
+    let prods = null;
+
+    t.doesNotThrow(
+        () => prods = analisador.analisar(
+            new LexicoBuffer(
+                (s, l) => s.split(' '),
+                '$',
+                [
+                    'comando-inic',
+                    'comando-reto literal-int especial-del',
+                    'comando-reto identificador especial-del',
+                    'comando-fim'
+                ]
+            )
+        ),
+        'Deve reconhecer a entrada'
+    );
+
+    t.deepEqual(
+        prods.map(p => p.comoString),
+        [
+            '<programa> -> <bloco_principal>',
+            '<bloco_principal> -> comando-inic <lista_comando> comando-fim',
+            '<lista_comando> -> <lista_comando> <comando>',
+            '<comando> -> <retorne_principal>',
+            '<retorne_principal> -> comando-reto <retorno_valor> especial-del',
+            '<retorno_valor> -> <expressao>',
+            '<expressao> -> <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> identificador',
+            '<lista_comando> -> <comando>',
+            '<comando> -> <retorne_principal>',
+            '<retorne_principal> -> comando-reto <retorno_valor> especial-del',
+            '<retorno_valor> -> <expressao>',
+            '<expressao> -> <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> <literal>',
+            '<literal> -> literal-int'
+        ],
+        'As produções devem casar'
+    );
+
+    t.end();
+});
+
+tape('Verificar regra sintática do bloco principal sem declarações comandos de atribuição e retorne', (t) => {
+
+    const analisador = new PrecedenciaFraca(gramatica, '<programa>', '$');
+    let prods = null;
+
+    t.doesNotThrow(
+        () => prods = analisador.analisar(
+            new LexicoBuffer(
+                (s, l) => s.split(' '),
+                '$',
+                [
+                    'comando-inic',
+                    'identificador especial-atr literal-int especial-del',
+                    'comando-reto identificador especial-del',
+                    'comando-fim'
+                ]
+            )
+        ),
+        'Deve reconhecer a entrada'
+    );
+
+    t.deepEqual(
+        prods.map(p => p.comoString),
+        [
+            '<programa> -> <bloco_principal>',
+            '<bloco_principal> -> comando-inic <lista_comando> comando-fim',
+            '<lista_comando> -> <lista_comando> <comando>',
+            '<comando> -> <retorne_principal>',
+            '<retorne_principal> -> comando-reto <retorno_valor> especial-del',
             '<retorno_valor> -> <expressao>',
             '<expressao> -> <expressao_termo>',
             '<expressao_termo> -> <expressao_fator>',
