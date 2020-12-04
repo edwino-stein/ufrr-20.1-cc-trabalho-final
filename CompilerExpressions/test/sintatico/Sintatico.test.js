@@ -136,6 +136,80 @@ tape('Verificar regra sintática do bloco principal sem declarações e com dois
     t.end();
 });
 
+tape('Verificar regra sintática do bloco principal sem declarações e com um comando retorne', (t) => {
+
+    let prods = null;
+
+    t.doesNotThrow(
+        () => prods = sintatico.parsearProducoes(`
+            inicio
+                retorne 123;
+            fim
+        `),
+        'Deve reconhecer a entrada'
+    );
+
+    t.deepEqual(
+        prods.map(p => p.comoString),
+        [
+            '<programa> -> <bloco_principal>',
+            '<bloco_principal> -> comando-inic <lista_comando> comando-fim',
+            '<lista_comando> -> <comando>',
+            '<comando> -> <retorne_principal>',
+            '<retorne_principal> -> comando-reto <retorno_valor> especial-del',
+            '<retorno_valor> -> <expressao>',
+            '<expressao> -> <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> <literal>',
+            '<literal> -> literal-int'
+        ],
+        'As produções devem casar'
+    );
+
+    t.end();
+});
+
+tape('Verificar regra sintática do bloco principal sem declarações e com comandos de atribuição e retorne', (t) => {
+
+    let prods = null;
+
+    t.doesNotThrow(
+        () => prods = sintatico.parsearProducoes(`
+            inicio
+                a = 123;
+                retorne a;
+            fim
+        `),
+        'Deve reconhecer a entrada'
+    );
+
+    t.deepEqual(
+        prods.map(p => p.comoString),
+        [
+            '<programa> -> <bloco_principal>',
+            '<bloco_principal> -> comando-inic <lista_comando> comando-fim',
+            '<lista_comando> -> <lista_comando> <comando>',
+            '<comando> -> <retorne_principal>',
+            '<retorne_principal> -> comando-reto <retorno_valor> especial-del',
+            '<retorno_valor> -> <expressao>',
+            '<expressao> -> <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> identificador',
+            '<lista_comando> -> <comando>',
+            '<comando> -> <atribuicao>',
+            '<atribuicao> -> identificador especial-atr <retorno_valor> especial-del',
+            '<retorno_valor> -> <expressao>',
+            '<expressao> -> <expressao_termo>',
+            '<expressao_termo> -> <expressao_fator>',
+            '<expressao_fator> -> <literal>',
+            '<literal> -> literal-int'
+        ],
+        'As produções devem casar'
+    );
+
+    t.end();
+});
+
 tape('Verificar regra sintática do bloco principal com declarações e com comandos de atribuição com expressão aritmetica', (t) => {
 
     let prods = null;

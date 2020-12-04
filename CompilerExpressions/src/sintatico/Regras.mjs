@@ -30,11 +30,16 @@ const gramatica = new Gramatica({
 
     // Lista de comandos
     '<lista_comando>': ['<lista_comando> <comando>', '<comando>'],
-    '<comando>': ['<atribuicao>'],
+    '<comando>': ['<atribuicao>', '<retorne_principal>'],
 
     // Atribuição
     // Padrão: var = ... ;
     '<atribuicao>': ['identificador especial-atr <retorno_valor> especial-del'],
+
+    // Retorno de valor e encerramento
+    // Padrão: retorne ... ;
+    '<retorne_principal>': ['comando-reto <retorno_valor> especial-del'],
+
     '<retorno_valor>': ['<expressao>'],
 
     // Expressão aritmetica para soma e subtração
