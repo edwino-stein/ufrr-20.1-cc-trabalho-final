@@ -72,7 +72,7 @@ tape('Verificar tabela de símbolos com redeclarações de variável', (t) => {
         (e) =>  typeof(e) === 'object' &&
                 e.detalhes.atual.palavra === 'resultado' &&
                 e.detalhes.tipo === 'redeclaracao',
-        'Deve informar erro erro de redeclaração do símbolo "resultado"'
+        'Deve informar erro de redeclaração do símbolo "resultado"'
     );
 
     t.end();
@@ -228,7 +228,97 @@ tape('Verificar comando de atribuição inválido', (t) => {
         (e) =>  typeof(e) === 'object' &&
                 e.detalhes.atual.palavra === 'b' &&
                 e.detalhes.tipo === 'variavel-nao-declarada',
-        'Deve informar erro erro de que a variavel "b" não foi declarada'
+        'Deve informar erro de que a variavel "b" não foi declarada'
+    );
+
+    t.end();
+});
+
+
+tape('Verificar comando retorne válidos simples com literal', (t) => {
+
+    const arvore = sintatico.parsear(`
+        inicio
+            retorne 123;
+        fim
+    `);
+
+    const semantico = new Semantico(arvore);
+    let arvoreExpressoes = [];
+
+    t.doesNotThrow(
+        () => arvoreExpressoes = semantico.validarComandos(),
+        'Não deve reportar erros'
+    );
+
+    t.equals(
+        arvoreExpressoes.length,
+        1,
+        'Deve conter apenas um comando retorne'
+    );
+
+    let lexemas = [];
+    arvoreExpressoes[0].emOrdem(n => lexemas.push(n.simbolo));
+
+    t.deepEqual(
+        lexemas,
+        ['123', 'retorne'],
+        'A expressão retorne em notação pós-fixa deve ser a esperada'
+    );
+
+    t.end();
+});
+
+tape('Verificar comando retorne válidos com expressão', (t) => {
+
+    const arvore = sintatico.parsear(`
+        inicio
+            retorne 25 % 5;
+        fim
+    `);
+
+    const semantico = new Semantico(arvore);
+    let arvoreExpressoes = [];
+
+    t.doesNotThrow(
+        () => arvoreExpressoes = semantico.validarComandos(),
+        'Não deve reportar erros'
+    );
+
+    t.equals(
+        arvoreExpressoes.length,
+        1,
+        'Deve conter apenas um comando retorne'
+    );
+
+    let lexemas = [];
+    arvoreExpressoes[0].emOrdem(n => lexemas.push(n.simbolo));
+
+    t.deepEqual(
+        lexemas,
+        ['25', '5', '%', 'retorne'],
+        'A expressão retorne em notação pós-fixa deve ser a esperada'
+    );
+
+    t.end();
+});
+
+tape('Verificar comando retorne repetidos', (t) => {
+
+    const arvore = sintatico.parsear(`
+        inicio
+            retorne 25 % 5;
+            retorne 1 * 100;
+        fim
+    `);
+
+    const semantico = new Semantico(arvore);
+    t.throws(
+        () => semantico.validarComandos(),
+        (e) =>  typeof(e) === 'object' &&
+                e.detalhes.atual[0].palavra === 'retorne' &&
+                e.detalhes.tipo === 'multiplos-retorne',
+        'Deve informar erro de multiplos comandos retorne'
     );
 
     t.end();
