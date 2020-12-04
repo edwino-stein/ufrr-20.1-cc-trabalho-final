@@ -76,9 +76,17 @@ export default class Semantico {
                 case '<atribuicao>':
                     arvores.push(this._validarAtribuicao(c.nos[0]));
                 break;
+                case '<retorne_principal>':
+                    arvores.push(this._validarRetornePrincipal(c.nos[0]));
+                break;
                 default:
                     throw ErroSemantico('', 'comando-invalido');
             }
+        }
+
+        const retorneComandos = arvores.filter(a => a.simbolo === 'retorne');
+        if( retorneComandos.length > 1) {
+            throw ErroSemantico(retorneComandos.map(r => r.extra), 'multiplos-retorne');
         }
 
         return arvores;
@@ -101,6 +109,20 @@ export default class Semantico {
 
         const arvore = new Arvore(atrOperador.extra.palavra);
         arvore._nos = [ esquerda, direita ];
+
+        return arvore;
+    }
+
+    _validarRetornePrincipal(retorne) {
+
+        const no = this._validarExpressao(
+            retorne.encontrarTodosNosPreOrdem('<expressao>', 2)[0],
+            'int'
+        );
+
+        const arvore = new Arvore(retorne.nos[0].extra.palavra);
+        arvore.extra = retorne.nos[0].extra;
+        arvore._nos = [ no ];
 
         return arvore;
     }
