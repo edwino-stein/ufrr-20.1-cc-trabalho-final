@@ -4,7 +4,7 @@
     "description": "Trabalho final da disciplina construção de compiladores 2020.1",
     "main": "index.mjs",
     "scripts": {
-        "test": "tape ${T:-test/*.test.js} | tap-spec"
+        "test": "tape ${T:-test/**/*.test.js} | tap-spec"
     },
     "author": "Edwino Stein",
     "license": "MIT",
