@@ -108,6 +108,7 @@ export default class Semantico {
         );
 
         const arvore = new Arvore(atrOperador.extra.palavra);
+        arvore.extra = atrOperador.extra;
         arvore._nos = [ esquerda, direita ];
 
         return arvore;
@@ -142,8 +143,8 @@ export default class Semantico {
         }
 
         if(nos[0].simbolo === 'op-aritmetico-sub'){
-            const atual = new Arvore(nos[1].extra.palavra);
-            atual.extra = nos[1].extra;
+            const atual = new Arvore(nos[0].extra.palavra);
+            atual.extra = nos[0].extra;
 
             const filho = this._validarExpressaoTermo(nos[1], tipo);
             atual._nos = [ filho ];
