@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "typeface-roboto": "^1.1.13",
     "vue": "^2.6.11",
     "vuetify": "^2.2.11"
   },
