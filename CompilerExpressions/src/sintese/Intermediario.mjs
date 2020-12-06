@@ -128,13 +128,8 @@ export default class Intermediario {
         for (const inst of instrucoes) {
             if(inst.operador !== '=') continue;
             if(inst.totalArgs !== 1) continue;
-
-            if(this._ehTemporario(inst.operando)) {
-                atribuicoesTempValor.push(inst);
-            }
-            else{
-                atribuicoesValorTemp.push(inst);
-            }
+            if(!this._ehTemporario(inst.operando)) continue;
+            atribuicoesTempValor.push(inst);
         }
 
         for (const a of atribuicoesTempValor) {
@@ -145,6 +140,14 @@ export default class Intermediario {
                     inst._argumentos[indice] = a.argumento(0);
                 }
             }
+        }
+
+        for (const inst of instrucoes) {
+            if(inst.operador !== '=') continue;
+            if(inst.totalArgs !== 1) continue;
+            if(this._ehTemporario(inst.operando)) continue;
+            if(!this._ehTemporario(inst.argumento(0))) continue;
+            atribuicoesValorTemp.push(inst);
         }
 
         for (const a of atribuicoesValorTemp) {
