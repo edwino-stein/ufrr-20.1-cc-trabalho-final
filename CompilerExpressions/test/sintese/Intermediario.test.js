@@ -462,3 +462,33 @@ tape('Verificar otimização de código intermediário', (t) => {
 
     t.end();
 });
+
+
+tape('Verificar otimização de código intermediário de uma atribuição simples', (t) => {
+
+    const semantico = new Semantico(sintatico.parsear(`
+        variaveis
+            r: int;
+        inicio
+            r = 123;
+        fim
+    `));
+
+    const gerador = new Intermediario(semantico.validarComandos());
+    const resultados = [
+        [
+            '= ( 123 ) -> r'
+        ]
+    ];
+
+    const comandos = gerador.optimizar();
+    for (let i = 0; i < comandos.length; ++i) {
+        t.deepEqual(
+            comandos[i].map(i => i.comoString()),
+            resultados[i],
+            'As instruções devem ser as esperadas'
+        );
+    }
+
+    t.end();
+});
