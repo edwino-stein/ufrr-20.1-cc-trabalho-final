@@ -13,9 +13,12 @@
                 class="h-100"
                 :style="{maxHeight: (altura - 1) + 'px'}"
             >
-                <v-col class="h-100" :style="{maxWidth: largura + 'px'}">
-                    <p>Editor</p>
+                <v-col class="h-100 ide-editor" :style="{maxWidth: largura + 'px'}">
+                    <Editor modo="clike" v-model="codigo" />
                 </v-col>
+                <v-divider
+                  vertical
+                ></v-divider>
                 <v-col class="h-100" :style="{maxWidth: largura + 'px'}">
                     <HelloWorld/>
                 </v-col>
@@ -26,14 +29,18 @@
 
 <script>
     import HelloWorld from './HelloWorld';
+    import Editor from './ide/Editor';
+
     export default {
         name: 'Ide',
         components: {
-            HelloWorld
+            HelloWorld,
+            Editor
         },
         data: () => ({
             altura: 0,
             largura: 0,
+            codigo: 'int i = 0;'
         }),
         mounted() {
             window.addEventListener('resize', this.onResize);
@@ -48,7 +55,9 @@
         methods: {
             onResize() {
                 this.altura = this.$refs.viewport.clientHeight;
-                this.largura = Math.floor(this.$refs.viewport.clientWidth/2);
+                this.largura = Math.floor(
+                    (this.$refs.viewport.clientWidth - 1)/2
+                );
             }
         }
     }
@@ -58,4 +67,8 @@
     .h-100 {
         height: 100%;
     }
+    .ide-editor .vue-codemirror > .CodeMirror {
+        border-radius: 0 0 0 4px;
+    }
+
 </style>
