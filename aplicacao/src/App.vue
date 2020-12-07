@@ -29,6 +29,7 @@
                 <v-col cols="9">
                     <v-container class="ml-0 pl-0">
                         <v-main>
+                            <Ide />
                         </v-main>
                     </v-container>
                 </v-col>
@@ -39,12 +40,14 @@
 
 <script>
 import ListaDeArquivos from './components/ListaDeArquivos';
+import Ide from './components/Ide';
 
 export default {
     name: 'App',
 
     components: {
         ListaDeArquivos,
+        Ide
     },
 
     data: () => ({}),
