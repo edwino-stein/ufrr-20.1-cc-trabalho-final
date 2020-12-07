@@ -11,6 +11,7 @@
     "core-js": "^3.6.5",
     "typeface-roboto": "^1.1.13",
     "vue": "^2.6.11",
+    "vue-codemirror": "^4.0.6",
     "vuetify": "^2.2.11"
   },
   "devDependencies": {
