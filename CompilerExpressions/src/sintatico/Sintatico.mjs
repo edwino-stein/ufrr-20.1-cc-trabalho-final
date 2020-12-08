@@ -17,11 +17,12 @@ export default class Sintatico {
         return this._analisador.analisar(new LexicoBuffer(handle, '$', entrada));
     }
 
-    parsear (entrada) {
+    parsear (entrada, proximaLexema) {
 
         let lexemas = [];
         const parsearLexemas = (e, l) => {
             const ls = this._lexico.tokenizarHandle(e, l);
+            if(getType(proximaLexema) === 'function') ls.forEach(proximaLexema);
             lexemas = [ ...[...ls].reverse(), ...lexemas ];
             return ls;
         }

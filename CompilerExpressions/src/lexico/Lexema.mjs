@@ -17,7 +17,7 @@ export default class Lexema {
             throw ParametroInvalido('coluna', 'number', getType(token));
         }
 
-        if(getType(token) !== 'Token') {
+        if(getType(token) !== 'object' || token === null) {
             throw ParametroInvalido('token', 'Token', getType(token));
         }
 

@@ -473,7 +473,7 @@ tape('Verificar análise com a gramática G com Lexemas', (t) => {
             ['var + *']
         )),
         (e) =>  typeof(e) === 'object' &&
-                getType(e.detalhes.encontrado) === 'Lexema' &&
+                getType(e.detalhes.encontrado) === 'object' &&
                 e.detalhes.encontrado.palavra === '*',
         'Não deve reconhecer a entrada "var + *" e deve retornar a lexema encontrada'
     );
