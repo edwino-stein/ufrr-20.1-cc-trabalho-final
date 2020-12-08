@@ -1,0 +1,29 @@
+svg text {
+    padding-top: 0.3em;
+    padding-bottom: 0.8em;
+    padding-left:0.65em;
+    padding-right:0.65em;
+    font-family: monospace;
+    font-weight: 400;
+}
+
+svg g.collapsed g text {
+    padding-left:0.5ex;
+    padding-right:0.5ex;
+}
+svg line,
+svg polyline {
+    font-size:1em; /*height not honored here by WebKit*/
+}
+svg polyline {
+    fill:none;
+}
+
+.shortTree line,
+.shortTree polyline {
+    font-size:0.25em;
+}
+.tallTree line,
+.tallTree polyline {
+    font-size:2em;
+}
