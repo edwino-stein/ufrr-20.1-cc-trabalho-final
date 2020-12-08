@@ -38,6 +38,14 @@
                         >
                             <v-tabs-slider></v-tabs-slider>
                             <v-tab
+                                href="#tab-simbolico"
+                                :disabled="!etapasConcluidas.includes('simbolico')"
+                            >
+                                Simbólico
+                                <v-icon>mdi-chip</v-icon>
+                            </v-tab>
+
+                            <v-tab
                                 href="#tab-sintese"
                                 :disabled="!etapasConcluidas.includes('sintese')"
                             >
@@ -68,6 +76,16 @@
                             v-show="etapasConcluidas.length > 0"
                             style="height: 100%; overflow-y: auto; padding-top: 60px;"
                         >
+                            <v-tab-item
+                                value="tab-sintatico"
+                                v-if="etapasConcluidas.includes('sintatico')"
+                            >
+                                <v-card flat>
+                                    <v-card-text>
+                                        <ResultadoSintatico :arvore="arvoreSintatica" />
+                                    </v-card-text>
+                                </v-card>
+                            </v-tab-item>
                             <v-tab-item
                                 value="tab-semantico"
                                 v-if="etapasConcluidas.includes('semantico')"
@@ -142,10 +160,11 @@
 
 <script>
 
-    import { Sintatico, Semantico, Intermediario } from 'compilerexpressions';
+    import { Sintatico, Semantico, Intermediario, Mips } from 'compilerexpressions';
     import ResultadoSintatico from './ide/ResultadoSintatico';
     import ResultadoSemantico from './ide/ResultadoSemantico';
     import ResultadoSintese from './ide/ResultadoSintese';
+    import ResultadoSimbolico from './ide/ResultadoSimbolico';
     import Editor from './ide/Editor';
     import ErroDetalhes from './ide/ErroDetalhes';
 
@@ -155,6 +174,7 @@
             ResultadoSintatico,
             ResultadoSemantico,
             ResultadoSintese,
+            ResultadoSimbolico,
             Editor,
             ErroDetalhes
         },
@@ -168,6 +188,7 @@
             tabelaDeSimbolos: null,
             arvoresDeExpressoes: null,
             gerados: null,
+            mips: null,
             erro: null
         }),
         mounted() {
@@ -189,6 +210,7 @@
                 this.tabelaDeSimbolos = null;
                 this.arvoresDeExpressoes = null;
                 this.gerados = [];
+                this.mips = null;
                 this.erro = null;
 
                 setTimeout(() => { this.compilar(); }, 100);
@@ -209,15 +231,20 @@
                     const intermediario = new Intermediario(this.arvoresDeExpressoes);
                     const gerados = intermediario.comandos;
                     const optimizados = intermediario.optimizar();
+                    this.mips = new Mips(semantico.tabelaDeSimbolos);
                     for (let i = 0; i < intermediario.totalComandos; ++i) {
                         this.gerados.push({
                             gerado: gerados[i],
                             otimizado: optimizados[i],
                             linha: this.arvoresDeExpressoes[i].extra.linha
                         });
+
+                        this.mips.adicionarInstrucoes(optimizados[i]);
                     }
 
                     this.etapasConcluidas.push('sintese');
+                    this.etapasConcluidas.push('simbolico');
+                    this.abaResultado = 'tab-simbolico';
                 }
                 catch(e) {
                     console.error(e);
