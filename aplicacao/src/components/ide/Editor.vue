@@ -13,6 +13,7 @@
     import { codemirror } from 'vue-codemirror'
     import 'codemirror/lib/codemirror.css'
     import 'codemirror/mode/clike/clike.js'
+    import 'codemirror/mode/gas/gas.js'
 
     export default {
         name: 'Editor',

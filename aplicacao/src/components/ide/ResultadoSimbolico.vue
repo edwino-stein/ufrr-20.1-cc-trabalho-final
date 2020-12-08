@@ -5,7 +5,7 @@
             Geração do código simbólico para <strong>arquitetura MIPS</strong>
         </span>
         <div class="mx-n4 mt-3">
-            <Editor apenasLeitura :value="assemblyParaString(simbolico)"/>
+            <Editor apenasLeitura modo="gas" :value="assemblyParaString(simbolico)"/>
         </div>
     </div>
 </template>
