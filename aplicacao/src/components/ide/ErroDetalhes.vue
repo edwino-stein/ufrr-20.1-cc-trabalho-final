@@ -50,11 +50,31 @@
                     }
                     this.parserDetalhes(this.erro.detalhes.encontrado);
                 break;
+                case 'Erro Semântico':
+                    this.tipo = 'semântico';
+                    this.menssagem = this.menssagemErroSemantico(this.erro.detalhes.tipo);
+                    this.parserDetalhes(
+                        this.erro.detalhes.atual instanceof Array ?
+                        this.erro.detalhes.atual[1] : this.erro.detalhes.atual
+                    );
+                break;
                 default:
                     this.tipo = 'Desconhecido';
             }
         },
         methods: {
+            menssagemErroSemantico(tipo) {
+                const erro =  {
+                    'variavel-nao-declarada': 'A variável não foi declarada',
+                    'tipo-incompativel': 'Tipo incompatível com váriavel ou expressão',
+                    'redeclaracao': 'Redeclaração de variável',
+                    'comando-invalido': 'O comando não é reconhecido pela linguagem',
+                    'multiplos-retorne': 'Multiplas definições do comando "retorne"'
+                };
+
+                if(typeof(erro[tipo]) !== 'undefined') return erro[tipo];
+                else return 'Erro semântico desconhecido';
+            },
             parserDetalhes(lexema) {
                 if(lexema === '$') {
                     const linhas = this.codigo.split(/\r?\n/);
