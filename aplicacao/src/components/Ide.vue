@@ -63,6 +63,19 @@
                                 <v-icon dense>mdi-hammer-wrench</v-icon>
                                 na barra superior.
                             </v-alert>
+                            <v-alert
+                                color="error"
+                                border="left"
+                                type="error"
+                                v-if="erro !== null"
+                            >
+                                <h3 class="mb-3">Um erro ocorreu durante a compilação</h3>
+                                <ErroDetalhes class="mb-2" :erro="erro" :codigo="codigo" />
+                                Realize as correções necessárias e tente novamente
+                                clicando no botão
+                                <v-icon dense>mdi-hammer-wrench</v-icon>
+                                na barra superior.
+                            </v-alert>
                         </div>
                     </v-card>
                 </v-col>
@@ -74,11 +87,13 @@
 <script>
 
     import Editor from './ide/Editor';
+    import ErroDetalhes from './ide/ErroDetalhes';
 
     export default {
         name: 'Ide',
         components: {
-            Editor
+            Editor,
+            ErroDetalhes
         },
         data: () => ({
             altura: 0,
