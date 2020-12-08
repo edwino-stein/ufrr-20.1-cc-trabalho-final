@@ -27,4 +27,8 @@ export default class Instrucao {
             this.operando
         ].join(' ');
     }
+
+    copiar() {
+        return new Instrucao(this._operador, this._operando, [...this._argumentos]);
+    }
 }
