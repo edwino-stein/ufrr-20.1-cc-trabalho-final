@@ -8,13 +8,17 @@ export default class Intermediario {
         this._comandos = this._parsearComandos(comandos);
     }
 
-    get comandos() { return [ ...this._comandos ]; }
+    get comandos() {
+        const comandos = [];
+        for (const com of this._comandos) comandos.push(com.map(c => c.copiar()))
+        return comandos;
+    }
     get totalComandos() { return this._comandos.length; }
 
     optimizar() {
         const otimizados = [];
-
-        for (const c of this._comandos) {
+        const comandos = this.comandos;
+        for (const c of comandos) {
             let otimizado = this._otimizarAtribuicoes(c);
             otimizados.push(this._otimizarComPropriedadesAlgebricas(otimizado));
         }
