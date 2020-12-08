@@ -35,6 +35,21 @@
         }),
         beforeMount() {
             switch (this.erro.message) {
+                case 'Erro léxico':
+                    this.tipo = 'léxico';
+                    this.menssagem = 'Palavra não reconhecida pela linguagem';
+                    this.parserDetalhes(this.erro.detalhes.encontrado);
+                break;
+                case 'Erro sintático':
+                    this.tipo = 'sintático';
+                    if(this.erro.detalhes.encontrado !== '$'){
+                        this.menssagem = 'Token não esperado ou inválido';
+                    }
+                    else {
+                        this.menssagem = 'Fim de cadeia inesperado ou estruta de programa inválida';
+                    }
+                    this.parserDetalhes(this.erro.detalhes.encontrado);
+                break;
                 default:
                     this.tipo = 'Desconhecido';
             }
