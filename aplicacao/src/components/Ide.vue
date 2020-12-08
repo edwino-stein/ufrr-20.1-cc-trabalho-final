@@ -38,6 +38,14 @@
                         >
                             <v-tabs-slider></v-tabs-slider>
                             <v-tab
+                                href="#tab-semantico"
+                                :disabled="!etapasConcluidas.includes('semantico')"
+                            >
+                                Semântica
+                                <v-icon>mdi-function-variant</v-icon>
+                            </v-tab>
+
+                            <v-tab
                                 href="#tab-sintatico"
                                 :disabled="!etapasConcluidas.includes('sintatico')"
                             >
@@ -52,6 +60,16 @@
                             v-show="etapasConcluidas.length > 0"
                             style="height: 100%; overflow-y: auto; padding-top: 60px;"
                         >
+                            <v-tab-item
+                                value="tab-sintese"
+                                v-if="etapasConcluidas.includes('sintese')"
+                            >
+                                <v-card flat>
+                                    <v-card-text>
+                                        <ResultadoSintese :gerados="gerados" />
+                                    </v-card-text>
+                                </v-card>
+                            </v-tab-item>
                             <v-tab-item
                                 value="tab-simbolico"
                                 v-if="etapasConcluidas.includes('simbolico')"
@@ -104,8 +122,9 @@
 
 <script>
 
-    import { Sintatico } from 'compilerexpressions';
+    import { Sintatico, Semantico } from 'compilerexpressions';
     import ResultadoSintatico from './ide/ResultadoSintatico';
+    import ResultadoSemantico from './ide/ResultadoSemantico';
     import Editor from './ide/Editor';
     import ErroDetalhes from './ide/ErroDetalhes';
 
@@ -113,6 +132,7 @@
         name: 'Ide',
         components: {
             ResultadoSintatico,
+            ResultadoSemantico,
             Editor,
             ErroDetalhes
         },
@@ -123,6 +143,8 @@
             codigo: 'variaveis\n\tvar: int;\ninicio\n\tvar = 123;\nfim',
             etapasConcluidas: [],
             arvoreSintatica: null,
+            tabelaDeSimbolos: null,
+            arvoresDeExpressoes: null,
             erro: null
         }),
         mounted() {
@@ -140,6 +162,9 @@
 
                 this.abaResultado = '';
                 this.etapasConcluidas = [];
+                this.arvoreSintatica = null;
+                this.tabelaDeSimbolos = null;
+                this.arvoresDeExpressoes = null;
                 this.erro = null;
 
                 setTimeout(() => { this.compilar(); }, 100);
@@ -151,6 +176,11 @@
                     const sintatico = new Sintatico();
                     this.arvoreSintatica = sintatico.parsear(this.codigo);
                     this.etapasConcluidas.push('sintatico');
+
+                    const semantico = new Semantico(this.arvoreSintatica);
+                    this.arvoresDeExpressoes = semantico.validarComandos();
+                    this.tabelaDeSimbolos = semantico.tabelaDeSimbolos;
+                    this.etapasConcluidas.push('semantico');
                 }
                 catch(e) {
                     console.error(e);
