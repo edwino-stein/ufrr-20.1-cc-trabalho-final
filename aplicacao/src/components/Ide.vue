@@ -37,6 +37,14 @@
                             style="position: absolute; top: 0; z-index:10;"
                         >
                             <v-tabs-slider></v-tabs-slider>
+                            <v-tab
+                                href="#tab-sintatico"
+                                :disabled="!etapasConcluidas.includes('sintatico')"
+                            >
+                                Sintática
+                                <v-icon>mdi-graph</v-icon>
+                            </v-tab>
+
                         </v-tabs>
 
                         <v-tabs-items
@@ -44,6 +52,16 @@
                             v-show="etapasConcluidas.length > 0"
                             style="height: 100%; overflow-y: auto; padding-top: 60px;"
                         >
+                            <v-tab-item
+                                value="tab-simbolico"
+                                v-if="etapasConcluidas.includes('simbolico')"
+                            >
+                                <v-card flat>
+                                    <v-card-text>
+                                        <ResultadoSimbolico :simbolico="mips"/>
+                                    </v-card-text>
+                                </v-card>
+                            </v-tab-item>
                         </v-tabs-items>
                         <div
                             class="pa-3"
@@ -86,12 +104,15 @@
 
 <script>
 
+    import { Sintatico } from 'compilerexpressions';
+    import ResultadoSintatico from './ide/ResultadoSintatico';
     import Editor from './ide/Editor';
     import ErroDetalhes from './ide/ErroDetalhes';
 
     export default {
         name: 'Ide',
         components: {
+            ResultadoSintatico,
             Editor,
             ErroDetalhes
         },
@@ -101,6 +122,7 @@
             abaResultado: '',
             codigo: 'variaveis\n\tvar: int;\ninicio\n\tvar = 123;\nfim',
             etapasConcluidas: [],
+            arvoreSintatica: null,
             erro: null
         }),
         mounted() {
@@ -124,6 +146,19 @@
             },
 
             compilar() {
+
+                try {
+                    const sintatico = new Sintatico();
+                    this.arvoreSintatica = sintatico.parsear(this.codigo);
+                    this.etapasConcluidas.push('sintatico');
+                }
+                catch(e) {
+                    console.error(e);
+                    console.log(e.detalhes);
+                    this.erro = e;
+                    this.etapasConcluidas = [];
+                    this.abaResultado = '';
+                }
             },
 
             onResize() {
