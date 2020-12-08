@@ -18,7 +18,7 @@ export default class LexicoBuffer {
             entrada = entrada.split(Padroes.EOL);
         }
 
-        if(getType(entrada) !== 'Array') {
+        if(getType(entrada) !== 'object' || entrada === null) {
             throw ParametroInvalido('entrada', 'Array ou string', getType(entrada));
         }
 

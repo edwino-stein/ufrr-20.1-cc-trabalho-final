@@ -4,7 +4,7 @@ export default class Instrucao {
     constructor(operador, operando, argumentos) {
         this._operador = operador;
         this._operando = operando;
-        this._argumentos = getType(argumentos) === 'Array' ? argumentos : [];
+        this._argumentos = getType(argumentos) === 'object' ? argumentos : [];
     }
 
     get operando() { return this._operando; }

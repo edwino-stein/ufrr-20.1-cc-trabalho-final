@@ -6,7 +6,7 @@ export default class PrecedenciaFraca {
 
     constructor(gram, inicial, fdc) {
 
-        if(getType(gram) !== 'Gramatica') {
+        if(getType(gram) !== 'object' || gram == null) {
             throw ParametroInvalido('gram', 'Gramatica', getType(gram));
         }
 
@@ -48,7 +48,7 @@ export default class PrecedenciaFraca {
         const prodsResultado = [];
 
         // Função para descobrir o tipo do token
-        const tokenTipo = (l) => getType(l) === 'Lexema' ? l.token.tipo : l;
+        const tokenTipo = (l) => getType(l) === 'object' ? l.token.tipo : l;
 
         // Ler a lexema atual
         let atual = buffer.proximo;
@@ -71,7 +71,6 @@ export default class PrecedenciaFraca {
             // Ler a ação da tabela DR no cruzamendo do símbolo do topo da pilha
             // (linha) e o símbolo atual da entrada (coluna)
             const acao = this._tabelaDR[tokenTipo(pilha[0])][tokenTipo(atual)];
-            // console.log(entrada[0], pilha, acao);
 
             // Se a ação for D (deslocamento)
             if (acao === 'D') {

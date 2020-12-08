@@ -28,7 +28,7 @@ export default class Token {
     get lexemas() { return [ ...this._lexemas ]; }
 
     registrarLexema(lexema) {
-        if(getType(lexema) !== 'Lexema') {
+        if(getType(lexema) !== 'object') {
             throw ParametroInvalido('lexema', 'Lexema', getType(lexema));
         }
 
