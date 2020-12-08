@@ -38,6 +38,14 @@
                         >
                             <v-tabs-slider></v-tabs-slider>
                             <v-tab
+                                href="#tab-sintese"
+                                :disabled="!etapasConcluidas.includes('sintese')"
+                            >
+                                Síntese
+                                <v-icon>mdi-iframe-braces-outline</v-icon>
+                            </v-tab>
+
+                            <v-tab
                                 href="#tab-semantico"
                                 :disabled="!etapasConcluidas.includes('semantico')"
                             >
@@ -60,6 +68,18 @@
                             v-show="etapasConcluidas.length > 0"
                             style="height: 100%; overflow-y: auto; padding-top: 60px;"
                         >
+                            <v-tab-item
+                                value="tab-semantico"
+                                v-if="etapasConcluidas.includes('semantico')"
+                            >
+                                <v-card flat>
+                                    <v-card-text>
+                                        <ResultadoSemantico
+                                            :tabela="tabelaDeSimbolos"
+                                            :expressoes="arvoresDeExpressoes"/>
+                                    </v-card-text>
+                                </v-card>
+                            </v-tab-item>
                             <v-tab-item
                                 value="tab-sintese"
                                 v-if="etapasConcluidas.includes('sintese')"
@@ -122,9 +142,10 @@
 
 <script>
 
-    import { Sintatico, Semantico } from 'compilerexpressions';
+    import { Sintatico, Semantico, Intermediario } from 'compilerexpressions';
     import ResultadoSintatico from './ide/ResultadoSintatico';
     import ResultadoSemantico from './ide/ResultadoSemantico';
+    import ResultadoSintese from './ide/ResultadoSintese';
     import Editor from './ide/Editor';
     import ErroDetalhes from './ide/ErroDetalhes';
 
@@ -133,6 +154,7 @@
         components: {
             ResultadoSintatico,
             ResultadoSemantico,
+            ResultadoSintese,
             Editor,
             ErroDetalhes
         },
@@ -145,6 +167,7 @@
             arvoreSintatica: null,
             tabelaDeSimbolos: null,
             arvoresDeExpressoes: null,
+            gerados: null,
             erro: null
         }),
         mounted() {
@@ -165,6 +188,7 @@
                 this.arvoreSintatica = null;
                 this.tabelaDeSimbolos = null;
                 this.arvoresDeExpressoes = null;
+                this.gerados = [];
                 this.erro = null;
 
                 setTimeout(() => { this.compilar(); }, 100);
@@ -181,6 +205,19 @@
                     this.arvoresDeExpressoes = semantico.validarComandos();
                     this.tabelaDeSimbolos = semantico.tabelaDeSimbolos;
                     this.etapasConcluidas.push('semantico');
+
+                    const intermediario = new Intermediario(this.arvoresDeExpressoes);
+                    const gerados = intermediario.comandos;
+                    const optimizados = intermediario.optimizar();
+                    for (let i = 0; i < intermediario.totalComandos; ++i) {
+                        this.gerados.push({
+                            gerado: gerados[i],
+                            otimizado: optimizados[i],
+                            linha: this.arvoresDeExpressoes[i].extra.linha
+                        });
+                    }
+
+                    this.etapasConcluidas.push('sintese');
                 }
                 catch(e) {
                     console.error(e);
