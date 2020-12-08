@@ -1,7 +1,5 @@
 export default function ErroLexico (encontrado) {
-    const exc = new Error (
-        'Lexema "' + encontrado.palavra + '" não reconhecida'
-    );
+    const exc = new Error ('Erro léxico');
     exc.detalhes = { encontrado: encontrado };
     return exc;
 }
