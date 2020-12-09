@@ -191,12 +191,16 @@ export default class Mips {
 
         for (const reg of comValorDefinido) {
             const valor = this._registradoresTeporarios[reg];
-            for (const inst of instrucoes) {
-                if(inst.argumentos.includes(valor)) continue;
-                this._defineValorParaRegistrador(null, reg);
-            }
-        }
 
+            let ehReutilizado = false;
+            for (const inst of instrucoes) {
+                if(inst.argumentos.includes(valor)){
+                    ehReutilizado = true;
+                    break;
+                }
+            }
+            if(!ehReutilizado) this._defineValorParaRegistrador(null, reg);
+        }
     }
 
     _resetarRegistradores () {
