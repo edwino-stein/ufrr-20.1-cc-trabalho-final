@@ -6,7 +6,9 @@
             <v-btn icon @click="onCompilar()">
                 <v-icon>mdi-hammer-wrench</v-icon>
             </v-btn>
-            <v-btn icon><v-icon>mdi-file</v-icon></v-btn>
+            <v-btn icon @click="onCarregarArquivo()">
+                <v-icon>mdi-file</v-icon>
+            </v-btn>
         </v-toolbar>
         <v-divider></v-divider>
 
@@ -155,6 +157,12 @@
                 </v-col>
             </v-row>
         </v-card-text>
+        <input
+            type="file"
+            accept="text/plain"
+            ref="inputArquivo"
+            style="display: none"
+        />
     </v-card>
 </template>
 
@@ -194,6 +202,7 @@
         mounted() {
             window.addEventListener('resize', this.onResize);
             this.onResize();
+            this.$refs.inputArquivo.onchange = this.onArquivoCarregado;
         },
         updated() {
             this.onResize();
@@ -214,6 +223,23 @@
                 this.erro = null;
 
                 setTimeout(() => { this.compilar(); }, 100);
+            },
+
+            onCarregarArquivo() {
+                this.$refs.inputArquivo.click();
+            },
+
+            onArquivoCarregado(event) {
+                const arquivo = event.target.files[0];
+                if(typeof(arquivo) !== "object") return;
+
+                const fileReader = new FileReader();
+                fileReader.onload = (d) => {
+                    this.codigo = d.target.result;
+                    this.$refs.inputArquivo.value = '';
+                };
+
+                fileReader.readAsText(arquivo);
             },
 
             compilar() {

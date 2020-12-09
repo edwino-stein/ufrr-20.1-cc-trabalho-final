@@ -47,13 +47,9 @@
                 readOnly: false,
             }
         }),
-        methods: {
-            onInput: function () { console.log(arguments[1]);}
-        },
-
         beforeMount() {
             this.opcoes.mode = this.modo;
-            this.opcoes.readOnly = this.apenasLeitura ? 'nocursor' : false;
+            this.opcoes.readOnly = this.apenasLeitura;
         }
     }
 </script>
