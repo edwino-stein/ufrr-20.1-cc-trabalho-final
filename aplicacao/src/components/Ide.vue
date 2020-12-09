@@ -190,7 +190,7 @@
             altura: 0,
             largura: 0,
             abaResultado: '',
-            codigo: 'variaveis\n\tvar: int;\ninicio\n\tvar = 123;\nfim',
+            codigo: 'variaveis\n\tvar: int;\ninicio\n\tvar = 0;\n\tretorne var;\nfim',
             etapasConcluidas: [],
             arvoreSintatica: null,
             tabelaDeSimbolos: null,
