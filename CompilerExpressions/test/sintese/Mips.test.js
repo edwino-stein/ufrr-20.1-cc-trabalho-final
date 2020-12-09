@@ -459,3 +459,57 @@ tape('Verificar código MIPS com comando retorne com expressão', (t) => {
     console.log('Código assembly:\n', gerarAssembly(mips.blocoDados, mips.blocoTexto));
     t.end();
 });
+
+tape('Verificar código MIPS com comando com expressão bem complexa', (t) => {
+
+    const semantico = new Semantico(sintatico.parsear(`
+        variaveis
+            a: int;
+            b: int;
+            c: int;
+            d: int;
+        inicio
+            retorne (a + b + c) * (b + c) - d;
+        fim
+    `));
+
+    const comandos = semantico.validarComandos();
+    const gerador = new Intermediario(comandos);
+    const instrucoes = gerador.optimizar();
+    const mips = new Mips(semantico.tabelaDeSimbolos);
+    for (const inst of instrucoes) mips.adicionarInstrucoes(inst);
+
+    t.deepEqual(
+        mips.blocoDados.map(d => [d.nome, d.diretiva, d.valor].join(' ')),
+        [
+            'id_int_a word 0',
+            'id_int_b word 0',
+            'id_int_c word 0',
+            'id_int_d word 0'
+        ],
+        'O bloco de dados deve ser o esperado'
+    );
+
+    t.deepEqual(
+        mips.blocoTexto.map(i => i.comoString()),
+        [
+            'lw ( id_int_b ) -> $t0',
+            'lw ( id_int_c ) -> $t1',
+            'add ( $t0 $t1 ) -> $t2',
+            'lw ( id_int_a ) -> $t3',
+            'add ( $t3 $t0 ) -> $t0',
+            'add ( $t0 $t1 ) -> $t0',
+            'mult ( $t2 ) -> $t0',
+            'mflo ( ) -> $t0',
+            'lw ( id_int_d ) -> $t1',
+            'sub ( $t0 $t1 ) -> $t0',
+            'addi ( $zero 17 ) -> $v0',
+            'add ( $zero $t0 ) -> $a0',
+            'syscall ( ) -> '
+        ],
+        'As instruções assembly devem ser as esperadas'
+    );
+
+    console.log('Código assembly:\n', gerarAssembly(mips.blocoDados, mips.blocoTexto));
+    t.end();
+});
