@@ -1,0 +1,12 @@
+variaveis
+    v0: int;
+    x0: int;
+    t: int;
+    a: int;
+inicio
+    v0 = 12;
+    x0 = 82;
+    t = 18;
+    a = 5;
+    retorne x0 + v0*t + (a*t*t)/2;
+fim

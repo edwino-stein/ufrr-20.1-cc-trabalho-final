@@ -1,0 +1,12 @@
+variaveis
+    a: int;
+    b: int;
+    c: int;
+    d: int;
+inicio
+    a = 22;
+    b = -13;
+    c = 48;
+    d = -70;
+    retorne (a + b + c) * (b + c) - d;
+fim

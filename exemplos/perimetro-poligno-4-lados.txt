@@ -1,0 +1,12 @@
+variaveis
+    cima: int;
+    baixo: int;
+    esquerda: int;
+    direita: int;
+inicio
+    cima = 5;
+    baixo = 3;
+    esquerda = 2;
+    direita = 6;
+    retorne cima + direita + baixo + esquerda;
+fim

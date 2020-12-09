@@ -1,0 +1,10 @@
+variaveis
+    altura: int;
+    peso: int;
+    imc: int;
+inicio
+    altura = 2;
+    peso = 85;
+    imc = peso / (altura * altura);
+    retorne imc;
+fim

@@ -1,0 +1,6 @@
+variaveis
+    valor: int;
+inicio
+    valor = 5;
+    retorne valor * valor;
+fim
